@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
+import styles from './styles';
 
 const Person = ({ name }) => (
-  <Text>{ name }</Text>
+  <View style={styles.line}>
+    <Text style={styles.lineText}>{ name }</Text>
+  </View>
 );
 
 export class PeopleList extends Component {
@@ -19,7 +22,7 @@ export class PeopleList extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         { this.state.people.map(person => <Person key={person.name.first} name={person.name.first}/>) }
       </View>
     )
