@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
+import capitalize from '../../utils/capitalize'
 import styles from './styles';
 
-const Person = ({ name }) => (
-  <View style={styles.line}>
-    <Text style={styles.lineText}>{ name }</Text>
-  </View>
-);
+const Person = ({ person }) => {
+  const { title, first, last } = person.name;
+  return (
+    <View style={styles.line}>
+      <Text style={styles.lineText}>{ `${capitalize(title)} ${capitalize(first)} ${capitalize(last)}` }</Text>
+    </View>
+  );
+};
 
 export class PeopleList extends Component {
   constructor(props) {
@@ -23,7 +27,7 @@ export class PeopleList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        { this.state.people.map(person => <Person key={person.name.first} name={person.name.first}/>) }
+        { this.state.people.map(person => <Person key={person.name.first} person={person}/>) }
       </View>
     )
   }
