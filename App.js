@@ -1,14 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import Header from './src/components/Header';
-import PeopleList from './src/components/PeopleList';
+import PeoplePage from './src/pages/PeoplePage';
 
 const App = () => (
   <View>
     <Header title="People"/>
-    <PeopleList/>
+    <PeoplePage/>
   </View>
 );
 
 export default App;
-

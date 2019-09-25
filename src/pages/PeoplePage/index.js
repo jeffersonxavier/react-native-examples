@@ -13,7 +13,7 @@ const Person = ({ person }) => {
   );
 };
 
-export class PeopleList extends Component {
+export class PeoplePage extends Component {
   constructor(props) {
     super(props)
     this.state = { people: [] };
@@ -34,4 +34,4 @@ export class PeopleList extends Component {
   }
 }
 
-export default PeopleList
+export default PeoplePage;
