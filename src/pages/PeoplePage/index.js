@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
-import capitalize from '../../utils/capitalize'
+import { Text, View, Image, TouchableOpacity } from 'react-native';
+import capitalize from '../../utils/capitalize';
 import styles from './styles';
 
 const Person = ({ person }) => {
   const { title, first, last } = person.name;
   return (
-    <View style={styles.line}>
-      <Image style={styles.avatar} source={{uri: person.picture.thumbnail}} />
-      <Text style={styles.lineText}>{ `${capitalize(title)} ${capitalize(first)} ${capitalize(last)}` }</Text>
-    </View>
+    <TouchableOpacity onPress={() => console.log('Press clicked', first)}>
+      <View style={styles.line}>
+        <Image style={styles.avatar} source={{uri: person.picture.thumbnail}} />
+        <Text style={styles.lineText}>{ `${capitalize(title)} ${capitalize(first)} ${capitalize(last)}` }</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
