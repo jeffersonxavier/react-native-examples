@@ -1,13 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
-import People from './src/pages/People';
 import Header from './src/components/Header';
+import Routes from './src/Routes';
 
 const App = () => (
-  <View>
+  <>
     <Header title="Pessoas"/>
-    <People/>
-  </View>
+    <Routes/>
+  </>
 );
 
 export default App;
