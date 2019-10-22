@@ -7,7 +7,18 @@ const AppNavigator = createStackNavigator({
     screen: People,
   }
 }, {
-  headerMode: 'none',
+  defaultNavigationOptions: {
+    title: 'Pessoas',
+    headerStyle: {
+      backgroundColor: '#7aa9f5',
+    },
+    headerTitleStyle: {
+      color: '#fff',
+      fontSize: 30,
+      flexGrow: 1,
+      textAlign: 'center',
+    },
+  }
 });
 
 export default createAppContainer(AppNavigator);
