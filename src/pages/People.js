@@ -1,9 +1,30 @@
 import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import capitalize from '../utils/capitalize';
+import api from '../services/api';
 
-const Person = ({ person }) => (
-  <TouchableOpacity onPress={() => console.log('Press clicked', person.name.first)}>
+const peopleArray = [
+  {
+    "gender": "male",
+    "name": {
+      "title": "Mr",
+      "first": "Caetano",
+      "last": "Barbosa"
+    },
+    "email": "caetano.barbosa@example.com",
+    "phone": "(07) 9042-4440",
+    "cell": "(80) 0994-5858",
+    "picture": {
+      "large": "https://randomuser.me/api/portraits/men/31.jpg",
+      "medium": "https://randomuser.me/api/portraits/med/men/31.jpg",
+      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/31.jpg"
+    },
+    "nat": "BR"
+  },
+];
+
+const Person = ({ person, onPress }) => (
+  <TouchableOpacity onPress={onPress}>
     <View style={styles.line}>
       <Image style={styles.avatar} source={{uri: person.picture.thumbnail}} />
       <Text style={styles.lineText}>{ `${capitalize(person.name.title)} ${capitalize(person.name.first)} ${capitalize(person.name.last)}` }</Text>
@@ -18,15 +39,23 @@ export class People extends Component {
   }
 
   componentDidMount() {
-    fetch('https://randomuser.me/api?results=5&nat=BR&exc=login,dob,registered,info,location,id')
-      .then(res => res.json())
-      .then(({ results }) => this.setState({ people: results }));
+    this.setState({ people: peopleArray });
+    api.get('/api?results=5&nat=BR&exc=login,dob,registered,info,location,id')
+      .then(({ data }) => {
+        this.setState({ people: data.results });
+      })
+      .catch(error => console.log(error));
   }
 
   render() {
     return (
       <View style={styles.container}>
-        { this.state.people.map(person => <Person key={person.name.first} person={person}/>) }
+        { this.state.people.map(person => (
+          <Person
+            key={person.name.first}
+            person={person}
+            onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person })}/>
+        )) }
       </View>
     )
   }
