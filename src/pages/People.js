@@ -1,27 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { Text, View, Image, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import capitalize from '../utils/capitalize';
 import api from '../services/api';
-
-const peopleArray = [
-  {
-    "gender": "male",
-    "name": {
-      "title": "Mr",
-      "first": "Caetano",
-      "last": "Barbosa"
-    },
-    "email": "caetano.barbosa@example.com",
-    "phone": "(07) 9042-4440",
-    "cell": "(80) 0994-5858",
-    "picture": {
-      "large": "https://randomuser.me/api/portraits/men/31.jpg",
-      "medium": "https://randomuser.me/api/portraits/med/men/31.jpg",
-      "thumbnail": "https://randomuser.me/api/portraits/thumb/men/31.jpg"
-    },
-    "nat": "BR"
-  },
-];
 
 const Person = ({ person, onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -35,38 +15,44 @@ const Person = ({ person, onPress }) => (
 export class People extends Component {
   constructor(props) {
     super(props)
-    this.state = { people: [] };
+    this.state = { people: [], loading: false };
   }
 
   componentDidMount() {
-    this.setState({ people: peopleArray });
+    this.setState({ loading: true });
     api.get('/api?results=15&nat=BR&exc=login,dob,registered,info,location,id')
       .then(({ data }) => {
-        this.setState({ people: data.results });
+        this.setState({ people: data.results, loading: false });
       })
       .catch(error => console.log(error));
   }
 
   render() {
     return (
-      <FlatList
-        style={styles.container}
-        data={this.state.people}
-        renderItem={({ item }) => (
-          <Person
-            key={item.name.first}
-            person={item}
-            onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person: item })}/>
-        )}
-        keyExtractor={item => item.name.first}
-      />
+      <View style={styles.container}>
+        {
+          this.state.loading
+            ? <ActivityIndicator size="large" color="#7aa9f5" />
+            : <FlatList
+              data={this.state.people}
+              renderItem={({ item }) => (
+                <Person
+                  key={item.name.first}
+                  person={item}
+                  onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person: item })}/>
+              )}
+              keyExtractor={item => item.name.first}
+            />
+        }
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e2f9ff',
+    flex: 1,
+    justifyContent: 'center',
   },
 
   line: {
@@ -88,7 +74,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     borderRadius: 50,
     flex: 1,
-  }
+  },
 });
 
 export default People;
