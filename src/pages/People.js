@@ -15,7 +15,7 @@ const Person = ({ person, onPress }) => (
 export class People extends Component {
   constructor(props) {
     super(props)
-    this.state = { people: [], loading: false };
+    this.state = { people: [], loading: false, error: false };
   }
 
   componentDidMount() {
@@ -24,7 +24,25 @@ export class People extends Component {
       .then(({ data }) => {
         this.setState({ people: data.results, loading: false });
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        this.setState({ error: true, loading: false });
+      });
+  }
+
+  renderList() {
+    return (
+      <FlatList
+        data={this.state.people}
+        renderItem={({ item }) => (
+          <Person
+            key={item.name.first}
+            person={item}
+            onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person: item })}/>
+        )}
+        keyExtractor={item => item.name.first}
+      />
+    );
   }
 
   render() {
@@ -33,16 +51,9 @@ export class People extends Component {
         {
           this.state.loading
             ? <ActivityIndicator size="large" color="#7aa9f5" />
-            : <FlatList
-              data={this.state.people}
-              renderItem={({ item }) => (
-                <Person
-                  key={item.name.first}
-                  person={item}
-                  onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person: item })}/>
-              )}
-              keyExtractor={item => item.name.first}
-            />
+            : this.state.error
+              ? <Text style={styles.error}>Algo deu errado...</Text>
+              : this.renderList()
         }
       </View>
     )
@@ -53,6 +64,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+
+  error: {
+    color: 'red',
+    alignSelf: 'center',
+    fontSize: 18,
   },
 
   line: {
