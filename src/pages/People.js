@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, Image, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
 import capitalize from '../utils/capitalize';
 import api from '../services/api';
 
@@ -49,14 +49,17 @@ export class People extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        { this.state.people.map(person => (
+      <FlatList
+        style={styles.container}
+        data={this.state.people}
+        renderItem={({ item }) => (
           <Person
-            key={person.name.first}
-            person={person}
-            onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person })}/>
-        )) }
-      </ScrollView>
+            key={item.name.first}
+            person={item}
+            onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person: item })}/>
+        )}
+        keyExtractor={item => item.name.first}
+      />
     )
   }
 }
