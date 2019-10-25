@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import capitalize from '../utils/capitalize';
 import api from '../services/api';
 
@@ -40,7 +40,7 @@ export class People extends Component {
 
   componentDidMount() {
     this.setState({ people: peopleArray });
-    api.get('/api?results=5&nat=BR&exc=login,dob,registered,info,location,id')
+    api.get('/api?results=15&nat=BR&exc=login,dob,registered,info,location,id')
       .then(({ data }) => {
         this.setState({ people: data.results });
       })
@@ -49,14 +49,14 @@ export class People extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         { this.state.people.map(person => (
           <Person
             key={person.name.first}
             person={person}
             onPress={() => this.props.navigation.navigate('PeopleDetailPage', { person })}/>
         )) }
-      </View>
+      </ScrollView>
     )
   }
 }
