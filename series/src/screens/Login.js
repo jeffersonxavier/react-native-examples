@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import firebase from '../services/api';
 import FormInput from '../components/FormInput';
 
 const Login = () => {
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
+
+  useEffect(() => {
+    firebase.auth().signInWithEmailAndPassword('admin@email.com', '123456')
+      .then(user => {
+        console.log(user);
+      })
+      .catch(error => console.log(error));
+  }, []);
 
   const handleSubmit = () => {
     console.log('login...', email, password);
