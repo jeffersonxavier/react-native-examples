@@ -1,22 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import firebase from '../services/api';
 import FormInput from '../components/FormInput';
 
 const Login = () => {
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
-
-  useEffect(() => {
-    firebase.auth().signInWithEmailAndPassword('admin@email.com', '123456')
-      .then(user => {
-        console.log(user);
-      })
-      .catch(error => console.log(error));
-  }, []);
+  const [ message, setMessage ] = useState('');
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const handleSubmit = () => {
-    console.log('login...', email, password);
+    setIsLoading(true);
+    setMessage('');
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(user => console.log(user))
+      .catch(error => {
+        console.log(error, error.code);
+        switch (error.code) {
+          case 'auth/invalid-email':
+            setMessage('E-mail mal formatado!');
+            break;
+          case 'auth/user-not-found':
+            setMessage('E-mail incorreto!');
+            break;
+          case 'auth/wrong-password':
+            setMessage('Senha incorreta!');
+            break;
+          default:
+            setMessage('Erro desconhecido!');
+            break;
+        }
+      })
+      .then(() => setIsLoading(false));
   }
 
   return (
@@ -33,9 +48,15 @@ const Login = () => {
         secureText={true}
         setInput={setPassword}/>
 
-      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
+      {
+        isLoading
+          ? <ActivityIndicator size="large" style={styles.indicator} />
+          : <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+              <Text style={styles.buttonText}>Entrar</Text>
+            </TouchableOpacity>
+      }
+
+      <Text>{message}</Text>
     </View>
   );
 };
@@ -43,6 +64,10 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 15,
+  },
+
+  indicator: {
+    marginTop: 40,
   },
 
   button: {
