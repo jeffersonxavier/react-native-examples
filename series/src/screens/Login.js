@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import firebase from '../services/api';
 import FormInput from '../components/FormInput';
+import { userLogin } from '../actions';
 
-const Login = () => {
+const Login = ({ userLogin }) => {
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ message, setMessage ] = useState('');
@@ -13,7 +15,7 @@ const Login = () => {
     setIsLoading(true);
     setMessage('');
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(user => console.log(user))
+      .then(user => setMessage('Sucesso!'))
       .catch(error => {
         console.log(error);
         switch (error.code) {
@@ -134,4 +136,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
+// export default Login;
+export default connect(null, { userLogin })(Login);
