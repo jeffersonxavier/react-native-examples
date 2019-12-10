@@ -14,26 +14,7 @@ const Login = ({ userLogin }) => {
   const handleSubmit = () => {
     setIsLoading(true);
     setMessage('');
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(user => setMessage('Sucesso!'))
-      .catch(error => {
-        console.log(error);
-        switch (error.code) {
-          case 'auth/invalid-email':
-            setMessage('E-mail mal formatado!');
-            break;
-          case 'auth/user-not-found':
-            setMessage('Usuário não encontrado!');
-            break;
-          case 'auth/wrong-password':
-            setMessage('Senha incorreta!');
-            break;
-          default:
-            setMessage('Erro desconhecido!');
-            break;
-        }
-      })
-      .then(() => setIsLoading(false));
+    userLogin(email, password);
   }
 
   const newUser = () => {
