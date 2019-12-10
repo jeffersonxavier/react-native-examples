@@ -14,7 +14,9 @@ const Login = ({ userLogin }) => {
   const handleSubmit = () => {
     setIsLoading(true);
     setMessage('');
-    userLogin(email, password);
+    
+    userLogin(email, password)
+      .then(() => setIsLoading(false));
   }
 
   const newUser = () => {

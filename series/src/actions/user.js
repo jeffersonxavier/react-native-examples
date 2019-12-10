@@ -1,7 +1,7 @@
 import firebase from '../services/api';
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
-export const userLoginSuccess = user => (
+const userLoginSuccess = user => (
   {
     type: USER_LOGIN_SUCCESS,
     user,
@@ -9,7 +9,7 @@ export const userLoginSuccess = user => (
 );
 
 export const USER_LOGOUT = 'USER_LOGOUT';
-export const userLogout = () => ({ type: USER_LOGOUT });
+const userLogout = () => ({ type: USER_LOGOUT });
 
 export const userLogin = (email, password) => dispatch => {
   return firebase.auth().signInWithEmailAndPassword(email, password)
@@ -34,5 +34,4 @@ export const userLogin = (email, password) => dispatch => {
     //       break;
     //   }
     // })
-    // .then(() => setIsLoading(false));
 };
